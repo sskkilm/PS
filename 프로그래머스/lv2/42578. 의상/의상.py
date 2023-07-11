@@ -2,7 +2,7 @@ def solution(clothes):
     answer = 1
     
     d = {}
-    for [name, kind] in clothes:
+    for name, kind in clothes:
         if kind not in d:
             d[kind] = 1
         else:
