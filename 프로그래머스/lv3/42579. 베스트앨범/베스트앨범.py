@@ -15,8 +15,8 @@ def solution(genres, plays):
         else:
             total[genre] += play
             
-    for (k, v) in sorted(total.items(), key = lambda x:x[1], reverse = True):
-        for (i, play) in sorted(d[k], key = lambda x:x[1], reverse = True)[:2]:
-            answer.append(i)
+    for k, v in sorted(total.items(), key = lambda x:x[1], reverse = True):
+        for t in sorted(d[k], key = lambda x:x[1], reverse = True)[:2]:
+            answer.append(t[0])
     
     return answer
