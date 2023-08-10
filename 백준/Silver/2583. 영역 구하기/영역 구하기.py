@@ -1,4 +1,5 @@
-from collections import deque
+import sys
+sys.setrecursionlimit(10**6)
 
 M, N, K = map(int, input().split())
 maps = [[0] * (N) for _ in range(M)]
@@ -11,35 +12,32 @@ for _ in range(K):
 
 visited = [[False] * N for _ in range(M)]
 delta = [(0, -1), (0, 1), (-1, 0), (1, 0)]
-cnt1 = 0
-def BFS(x, y):
-    cnt2 = 1
-    que = deque()
-    que.append((x,y))
+cnt = 0
+
+def DFS(x, y):
+    global cnt
     visited[x][y] = True
-    while que:
-        cur_x, cur_y= que.popleft()
+    cnt += 1
 
-        for dx, dy in delta:
-            next_x = cur_x + dx
-            next_y = cur_y + dy
+    for dx, dy in delta:
+        next_x = x + dx
+        next_y = y + dy
 
-            if next_x < 0 or next_x > M-1: continue
-            if next_y < 0 or next_y > N-1: continue
+        if next_x < 0 or next_x > M-1: continue
+        if next_y < 0 or next_y > N-1: continue
 
-            if maps[next_x][next_y] == 0 and not visited[next_x][next_y]:
-                que.append((next_x, next_y))
-                cnt2 += 1
-                visited[next_x][next_y] = True
-    return cnt2
+        if maps[next_x][next_y] == 0 and not visited[next_x][next_y]:
+            DFS(next_x, next_y)
 
 answer = []
 
 for x in range(M):
     for y in range(N):
         if maps[x][y] == 0 and not visited[x][y]:
-            answer.append(BFS(x, y))
-            cnt1 += 1
+            DFS(x, y)
+            answer.append(cnt)
+            cnt = 0
+
 answer.sort()
-print(cnt1)
+print(len(answer))
 print(" ".join(map(str, answer)))
