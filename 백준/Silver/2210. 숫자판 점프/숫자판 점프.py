@@ -1,16 +1,11 @@
-# import sys
-# sys.setrecursionlimit(10**6)
-
 board = [list(map(str, input().split())) for _ in range(5)]
 
-
-answer = []
+answer = set()
 delta = {(-1, 0), (1, 0), (0, -1), (0, 1)}
 
 def dfs(x, y, num):
     if len(num) == 6:
-        if num not in answer:
-            answer.append(num)
+        answer.add(num)
         return
     
     for dx, dy in delta:
