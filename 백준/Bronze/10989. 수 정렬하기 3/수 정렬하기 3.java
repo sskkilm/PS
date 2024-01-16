@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 public class Main {
     public static void main(String[] args) throws Exception{
         // 1 ~ 10000000
-        int[] cnt = new int[10000001];
+        int[] cnt = new int[10001];
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -19,7 +19,7 @@ public class Main {
         br.close();
 
         StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < 10000001; i++) {
+        for (int i = 1; i < 10001; i++) {
             while(cnt[i]>0) {
                 sb.append(i).append('\n');
                 cnt[i]--;
