@@ -1,27 +1,22 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static final int M = 1234567891;
+
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int L = Integer.parseInt(br.readLine());
-        String s = br.readLine();
+        String S = br.readLine();
 
-        int sum = 0;
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            int num = c - 96;
-
-            int tmp = 1;
-            for (int j = 0; j < i; j++) {
-                tmp *= 31;
-                tmp %= 1234567891;
-            }
-
-            num = num * tmp % 1234567891;
-            sum += num % 1234567891;
+        long sum = 0;
+        long pow = 1;
+        for (int i = 0; i < L; i++) {
+            sum += (S.charAt(i) - 'a' + 1) * pow % M;
+            pow = pow * 31 % M;
         }
-        System.out.println(sum);
+        long hash = sum % M;
+        System.out.println(hash);
     }
 }
-
