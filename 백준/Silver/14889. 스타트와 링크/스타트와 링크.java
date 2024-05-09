@@ -6,33 +6,29 @@ public class Main {
     public static int N, answer = Integer.MAX_VALUE;
     public static boolean[] visited;
     public static int[][] arr;
-    public static List<Integer> startTeam = new ArrayList<>();
-    public static List<Integer> linkTeam = new ArrayList<>();
 
     public static void dfs(int depth, int start) {
         if (depth == N / 2) {
-            for (int i = 0; i < N; i++) {
-                if (visited[i]) {
-                    startTeam.add(i);
-                } else {
-                    linkTeam.add(i);
-                }
-            }
             int startSum = 0;
             int linkSum = 0;
-            for (int i = 0; i < startTeam.size() - 1; i++) {
-                int start_i = startTeam.get(i);
-                int link_i = linkTeam.get(i);
-                for (int j = i + 1; j < startTeam.size(); j++) {
-                    int start_j = startTeam.get(j);
-                    int link_j = linkTeam.get(j);
-                    startSum += (arr[start_i][start_j] + arr[start_j][start_i]);
-                    linkSum += (arr[link_i][link_j] + arr[link_j][link_i]);
+
+            for (int i = 0; i < N - 1; i++) {
+                for (int j = i + 1; j < N; j++) {
+                    if (visited[i] && visited[j]) {
+                        startSum += (arr[i][j] + arr[j][i]);
+                    }
+                    if (!visited[i] && !visited[j]) {
+                        linkSum += (arr[i][j] + arr[j][i]);
+                    }
                 }
             }
+
+            if (startSum == linkSum) {
+                System.out.println(0);
+                System.exit(0);
+            }
+
             answer = Math.min(answer, Math.abs(startSum - linkSum));
-            startTeam.clear();
-            linkTeam.clear();
             return;
         }
 
