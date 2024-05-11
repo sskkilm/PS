@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
@@ -6,17 +5,21 @@ import java.util.Scanner;
 public class Main {
     public static int F, S, G, U, D;
     public static int[] dist;
+    public static boolean[] visited;
     public static void bfs(int S) {
         Queue<Integer> queue = new LinkedList<>();
         queue.add(S);
 
+        visited = new boolean[F + 1];
+        visited[S] = true;
+
         dist = new int[F + 1];
-        Arrays.fill(dist, Integer.MAX_VALUE);
         dist[S] = 0;
 
         while (!queue.isEmpty()) {
             int cur = queue.poll();
             if (cur == G) {
+                System.out.println(dist[G]);
                 return;
             }
 
@@ -30,12 +33,15 @@ public class Main {
 
                 if (next < 1 || next > F) continue;
 
-                if (dist[next] > dist[cur] + 1) {
+                if (!visited[next]) {
+                    visited[next] = true;
                     dist[next] = dist[cur] + 1;
                     queue.add(next);
                 }
             }
         }
+
+        System.out.println("use the stairs");
     }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -46,12 +52,5 @@ public class Main {
         D = sc.nextInt();
 
         bfs(S);
-
-        if (dist[G] == Integer.MAX_VALUE) {
-            System.out.println("use the stairs");
-            return;
-        }
-
-        System.out.println(dist[G]);
     }
 }
