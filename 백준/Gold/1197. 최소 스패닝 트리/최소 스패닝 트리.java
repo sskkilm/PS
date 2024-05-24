@@ -1,58 +1,72 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Scanner;
 
 class Node {
-    int v;
+    int v1;
+    int v2;
     int cost;
 
-    public Node(int v, int cost) {
-        this.v = v;
+    public Node(int v1, int v2, int cost) {
+        this.v1 = v1;
+        this.v2 = v2;
         this.cost = cost;
     }
 }
 
 public class Main {
+    public static int[] arr;
+    public static int find(int v) {
+        if (v == arr[v]) {
+            return v;
+        } else {
+            arr[v] = find(arr[v]);
+            return arr[v];
+        }
+    }
+
+    public static void union(int v1, int v2) {
+        int fv1 = find(v1);
+        int fv2 = find(v2);
+
+        if (fv1 != fv2) {
+            arr[fv1] = fv2;
+        }
+    }
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int V = sc.nextInt();
         int E = sc.nextInt();
-        List<List<Node>> graph = new ArrayList<>();
-        for (int i = 0; i <= V; i++) {
-            graph.add(new ArrayList<>());
-        }
 
+        List<Node> list = new ArrayList<>();
         for (int i = 0; i < E; i++) {
             int v1 = sc.nextInt();
             int v2 = sc.nextInt();
             int cost = sc.nextInt();
 
-            graph.get(v1).add(new Node(v2, cost));
-            graph.get(v2).add(new Node(v1, cost));
+            list.add(new Node(v1, v2, cost));
         }
+        Collections.sort(list, (o1, o2) -> o1.cost - o2.cost);
 
-        PriorityQueue<Node> pq = new PriorityQueue<>((o1, o2) -> o1.cost - o2.cost);
-        pq.add(new Node(1, 0));
-        boolean[] visited = new boolean[V + 1];
+        arr = new int[V + 1];
+        for (int i = 1; i <= V; i++) {
+            arr[i] = i;
+        }
 
         int cnt = 0;
         int sum = 0;
-        while (!pq.isEmpty()) {
-            Node cur = pq.poll();
+        for (Node node : list) {
+            int fv1 = find(node.v1);
+            int fv2 = find(node.v2);
 
-            if (!visited[cur.v]) {
-                visited[cur.v] = true;
-                sum += cur.cost;
+            if (fv1 != fv2) {
+                union(fv1, fv2);
+                sum += node.cost;
                 cnt++;
-                if (cnt == V) {
+                if (cnt == V - 1) {
                     break;
-                }
-
-                for (Node next : graph.get(cur.v)) {
-                    if (!visited[next.v]) {
-                        pq.add(next);
-                    }
                 }
             }
         }
