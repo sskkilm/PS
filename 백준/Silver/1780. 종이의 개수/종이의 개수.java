@@ -5,27 +5,17 @@ public class Main {
     public static int[][] arr;
 
     public static boolean check(int x, int y, int len) {
-        int ct1 = 0;
-        int ct2 = 0;
-        int ct3 = 0;
+        int tmp = arr[x][y];
 
         for (int i = x; i < x + len; i++) {
             for (int j = y; j < y + len; j++) {
-                if (arr[i][j] == -1) {
-                    ct1++;
-                } else if (arr[i][j] == 0) {
-                    ct2++;
-                } else if (arr[i][j] == 1) {
-                    ct3++;
+                if (arr[i][j] != tmp) {
+                    return false;
                 }
             }
         }
 
-        if (ct1 == len * len || ct2 == len * len || ct3 == len * len) {
-            return true;
-        }
-
-        return false;
+        return true;
     }
     public static void dfs(int x, int y, int len) {
         if (check(x, y, len)) {
