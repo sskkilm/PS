@@ -5,8 +5,8 @@ class Solution {
         int answer = 0;
 
         List<String> list = List.of("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine");
-        for (String s1 : list) {
-            s = s.replace(s1, String.valueOf(list.indexOf(s1)));
+        for (int i = 0; i < list.size(); i++) {
+            s = s.replace(list.get(i), String.valueOf(i));
         }
 
         answer = Integer.parseInt(s);
