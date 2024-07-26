@@ -8,14 +8,6 @@ class Song {
         this.idx = idx;
         this.play = play;
     }
-
-    @Override
-    public String toString() {
-        return "Song{" +
-                "idx=" + idx +
-                ", play=" + play +
-                '}';
-    }
 }
 
 class Solution {
@@ -40,10 +32,8 @@ class Solution {
             }
             Collections.sort(songs, (o1, o2) -> o2.play - o1.play);
 
-            if (songs.size() == 1) {
-                ans.add(songs.get(0).idx);
-            } else {
-                ans.add(songs.get(0).idx);
+            ans.add(songs.get(0).idx);
+            if (songs.size() != 1) {
                 ans.add(songs.get(1).idx);
             }
         }
