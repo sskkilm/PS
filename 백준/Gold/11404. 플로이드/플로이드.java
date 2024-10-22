@@ -1,34 +1,36 @@
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static final int INF = 100000 * (100 - 1) + 1;
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int m = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = null;
 
+        int n = Integer.parseInt(br.readLine());
+        int m = Integer.parseInt(br.readLine());
         int[][] arr = new int[n + 1][n + 1];
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n; j++) {
-                arr[i][j] = INF;
-                if (i == j) {
-                    arr[i][j] = 0;
-                }
+                arr[i][j] = Integer.MAX_VALUE / 2;
             }
         }
-
         for (int i = 0; i < m; i++) {
-            int v1 = sc.nextInt();
-            int v2 = sc.nextInt();
-            int cost = sc.nextInt();
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
 
-            arr[v1][v2] = Math.min(arr[v1][v2], cost);
+            arr[a][b] = Math.min(arr[a][b], c);
         }
 
         for (int k = 1; k <= n; k++) {
             for (int i = 1; i <= n; i++) {
                 for (int j = 1; j <= n; j++) {
+                    if (i == j) {
+                        continue;
+                    }
                     arr[i][j] = Math.min(arr[i][j], arr[i][k] + arr[k][j]);
                 }
             }
@@ -36,12 +38,14 @@ public class Main {
 
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n; j++) {
-                if (arr[i][j] == INF) {
+                if (i == j || arr[i][j] == Integer.MAX_VALUE / 2) {
                     System.out.print(0 + " ");
+                } else {
+                    System.out.print(arr[i][j] + " ");
                 }
-                else System.out.print(arr[i][j] + " ");
             }
             System.out.println();
         }
+
     }
 }
