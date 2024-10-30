@@ -1,18 +1,13 @@
 class Solution {
     public long solution(int n, int[] times) {
-        long answer = 0;
+        long answer = (long) 1e18;
 
-        long max = Integer.MIN_VALUE;
-        for (int i = 0; i < times.length; i++) {
-            max = Math.max(max, times[i]);
-        }
-        
         long left = 0;
-        long right = max * n;
+        long right = answer;
         while (left <= right) {
             long mid = (left + right) / 2;
             if (check(mid, times) >= n) {
-                answer = mid;
+                answer = Math.min(answer, mid);
                 right = mid - 1;
             } else {
                 left = mid + 1;
@@ -22,11 +17,12 @@ class Solution {
         return answer;
     }
 
-    public static long check(long mid, int[] times) {
-        long n = 0;
-        for (int i = 0; i < times.length; i++) {
-            n += mid / times[i];
+    public long check(long mid, int[] times) {
+        long cnt = 0;
+        for (int time : times) {
+            cnt += mid / time;
         }
-        return n;
+
+        return cnt;
     }
 }
