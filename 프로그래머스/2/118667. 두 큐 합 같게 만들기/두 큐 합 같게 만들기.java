@@ -3,50 +3,50 @@ import java.util.Queue;
 
 class Solution {
     public int solution(int[] queue1, int[] queue2) {
+        int answer = -1;
 
         long sum1 = 0;
         Queue<Integer> q1 = new LinkedList<>();
-        for (int i = 0; i < queue1.length; i++) {
-            q1.add(queue1[i]);
-            sum1 += queue1[i];
+        for (int e : queue1) {
+            sum1 += e;
+            q1.add(e);
         }
 
         long sum2 = 0;
         Queue<Integer> q2 = new LinkedList<>();
-        for (int i = 0; i < queue2.length; i++) {
-            q2.add(queue2[i]);
-            sum2 += queue2[i];
+        for (int e : queue2) {
+            sum2 += e;
+            q2.add(e);
         }
 
-        long total = sum1 + sum2;
-        if (total % 2 != 0) {
+        if ((sum1 + sum2) % 2 != 0) {
             return -1;
         }
 
-        long std = total / 2;
-        int len = queue1.length + queue2.length;
+        int len = queue1.length;
+
         int cnt = 0;
-        for (int i = 0; i < len * 2; i++) {
-            if (sum1 == std) {
-                return cnt;
-            } else if (sum1 > std) {
-                int poll = q1.poll();
-                sum1 -= poll;
-                sum2 += poll;
-                q2.add(poll);
-                cnt++;
-            } else {
-                int poll = q2.poll();
-                sum2 -= poll;
-                sum1 += poll;
-                q1.add(poll);
-                cnt++;
+        while (true) {
+            if (cnt > 3 * len) {
+                break;
             }
-        }
-        if (sum1 == std) {
-            return cnt;
+            if (sum1 == sum2) {
+                answer = cnt;
+                break;
+            } else if (sum1 > sum2) {
+                int e = q1.poll();
+                q2.add(e);
+                sum1 -= e;
+                sum2 += e;
+            } else {
+                int e = q2.poll();
+                q1.add(e);
+                sum1 += e;
+                sum2 -= e;
+            }
+            cnt++;
         }
 
-        return -1;
+        return answer;
     }
 }
