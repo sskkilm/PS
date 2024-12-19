@@ -1,32 +1,56 @@
-import java.util.*;
+import java.util.PriorityQueue;
+
+class Job {
+    int number;
+    int startTime;
+    int runTime;
+
+    public Job(int number, int startTime, int runTime) {
+        this.number = number;
+        this.startTime = startTime;
+        this.runTime = runTime;
+    }
+}
 
 class Solution {
     public int solution(int[][] jobs) {
         int answer = 0;
-        
-        Arrays.sort(jobs, (a, b) -> a[0] - b[0]);
-        
-        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
-        
-        int index = 0;
-        int count = 0;
-        int total = 0;
-        int end = 0;
-        while(count < jobs.length) {
-            
-            while(index < jobs.length && jobs[index][0] <= end) {
-                pq.add(jobs[index++]);
-            }
-            
-            if(pq.isEmpty()) {
-                end = jobs[index][0];
-            } else {
-                int[] cur = pq.poll();
-                total += cur[1] + end - cur[0];
-                end += cur[1];
-                count++;
-            }
+
+        int n = jobs.length;
+        PriorityQueue<Job> jobQueue = new PriorityQueue<>((o1, o2) -> o1.startTime - o2.startTime);
+        for (int i = 0; i < n; i++) {
+            jobQueue.add(new Job(i, jobs[i][0], jobs[i][1]));
         }
-        return total / jobs.length;
+
+        PriorityQueue<Job> waitingQueue = new PriorityQueue<>((o1, o2) -> {
+            if (o1.runTime == o2.runTime && o1.startTime == o2.startTime) {
+                return o1.number - o2.number;
+            }
+            if (o1.runTime == o2.runTime) {
+                return o1.startTime - o2.startTime;
+            }
+            return o1.runTime - o2.runTime;
+        });
+
+        int sum = 0;
+        int curTime = 0;
+        while (!jobQueue.isEmpty() || !waitingQueue.isEmpty()) {
+            while (!jobQueue.isEmpty() && curTime >= jobQueue.peek().startTime) {
+                waitingQueue.add(jobQueue.poll());
+            }
+
+            if (waitingQueue.isEmpty()) {
+                curTime = jobQueue.peek().startTime;
+                continue;
+            }
+
+            Job job = waitingQueue.poll();
+            curTime += job.runTime;
+            sum += curTime - job.startTime;
+        }
+
+        answer = sum / n;
+
+        return answer;
     }
 }
