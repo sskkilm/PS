@@ -2,36 +2,38 @@ class Solution {
     public int solution(String s) {
         int answer = Integer.MAX_VALUE;
 
-        int len = s.length();
-        if (len == 1) {
-            return 1;
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = len / 2; i >= 1; i--) {
-            int a = len / i;
-            int b = len % i;
+        int maxUnitLength = s.length() / 2;
+        for (int unitLength = 1; unitLength <= maxUnitLength; unitLength++) {
+            String unit = s.substring(0, unitLength);
             int cnt = 0;
-            String cur = s.substring(0, i);
-            for (int j = 0; j < a; j++) {
-                String next = s.substring(j * i, j * i + i);
-                if (cur.equals(next)) {
+            StringBuilder sb = new StringBuilder();
+            int lastIndex = 0;
+            while (lastIndex <= s.length() - unitLength) {
+                String str = s.substring(lastIndex, lastIndex + unitLength);
+                if (str.equals(unit)) {
                     cnt++;
                 } else {
-                    if (cnt != 1) {
-                        sb.append(cnt);
+                    if (cnt == 1) {
+                        sb.append(unit);
+                    } else {
+                        sb.append(cnt).append(unit);
                     }
-                    sb.append(cur);
-                    cur = next;
                     cnt = 1;
+                    unit = str;
                 }
+                lastIndex += unitLength;
             }
-            if (cnt != 1) {
-                sb.append(cnt);
+            if (cnt == 1) {
+                sb.append(unit);
+            } else {
+                sb.append(cnt).append(unit);
             }
-            sb.append(cur);
-            sb.append(s.substring(len - b));
-            answer = Math.min(answer, sb.toString().length());
-            sb.delete(0, sb.length());
+            sb.append(s.substring(lastIndex));
+            answer = Math.min(answer, sb.length());
+        }
+
+        if (answer == Integer.MAX_VALUE) {
+            return 1;
         }
 
         return answer;
