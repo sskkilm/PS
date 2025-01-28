@@ -1,20 +1,25 @@
+import java.util.Stack;
+
 class Solution {
     public String solution(String number, int k) {
-        StringBuilder sb = new StringBuilder();
+        Stack<Integer> stack = new Stack<>();
 
-        int prev = 0;
         int len = number.length() - k;
-        for (int i = 0; i < len; i++) {
-            int max = 0;
-            for (int j = prev; j <= k + i; j++) {
-                if (max < number.charAt(j) - '0') {
-                    max = number.charAt(j) - '0';
-                    prev = j + 1;
-                }
+
+        for (int i = 0; i < number.length(); i++) {
+            int num = Character.getNumericValue(number.charAt(i));
+            while (!stack.isEmpty() && k > 0 && stack.peek() < num) {
+                stack.pop();
+                k--;
             }
-            sb.append(max);
+            stack.push(num);
         }
 
-        return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        while (!stack.isEmpty()) {
+            sb.append(stack.pop());
+        }
+
+        return sb.reverse().substring(0, len);
     }
 }
