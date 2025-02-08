@@ -1,18 +1,18 @@
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 class Solution {
     public int n;
     public boolean[] visited;
-    public Set<List<String>> set;
+    public int[] output;
+    public Set<Set<String>> set;
 
     public int solution(String[] user_id, String[] banned_id) {
         set = new HashSet<>();
 
         n = banned_id.length;
         visited = new boolean[user_id.length];
+        output = new int[n];
         dfs(0, user_id, banned_id);
 
         return set.size();
@@ -20,19 +20,18 @@ class Solution {
 
     public void dfs(int depth, String[] user_id, String[] banned_id) {
         if (depth == n) {
-            List<String> list = new ArrayList<>();
-            for (int i = 0; i < visited.length; i++) {
-                if (visited[i]) {
-                    list.add(user_id[i]);
-                }
+            Set<String> result = new HashSet<>();
+            for (int i = 0; i < n; i++) {
+                result.add(user_id[output[i]]);
             }
-            set.add(list);
+            set.add(result);
             return;
         }
 
         for (int i = 0; i < user_id.length; i++) {
             if (!visited[i] && match(user_id[i], banned_id[depth])) {
                 visited[i] = true;
+                output[depth] = i;
                 dfs(depth + 1, user_id, banned_id);
                 visited[i] = false;
             }
